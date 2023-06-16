@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Home Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to my homepage!</h1>
+    </header>
+
+    <main>
+        <p id="content">Hello, world! This is my first homepage.</p>
+        <button id="changeContent">Change Content</button>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Trent Hudgens</p>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
