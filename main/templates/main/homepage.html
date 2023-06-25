@@ -2,17 +2,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Home Page</title>
+    <title>sketchguess</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-</head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        canvas {
+            border: 2px solid rgb(39, 19, 168);
+        }
+    </style>
+  </head>
 <body>
-    <header>
-        <h1>Welcome to my homepage!</h1>
-    </header>
+  <header>
+      <nav class="navbar">
+          <div class="logo">
+              <a href="#">sketchguess</a>
+          </div>
+      </nav>
+  </header>
+
+      
 
     <main>
-        <p id="content">Hello, world! This is my first homepage.</p>
-        <button id="changeContent">Change Content</button>
+      <div id="canvasContainer">
+        <canvas id="sketchpad" width="280" height="280"></canvas>
+      </div>
+      <button id="clearButton">Clear</button>
+      <button id="saveButton">Guess!</button>
+
+      <div>
+        <div id="data">{{ data }}</div>
+        <div id="formattedData">Prediction: {{ data }}</div>
+
+      </div>
+
     </main>
 
     <footer>
@@ -20,5 +42,6 @@
     </footer>
 
     <script src="{% static 'js/script.js' %}"></script>
+
 </body>
 </html>
