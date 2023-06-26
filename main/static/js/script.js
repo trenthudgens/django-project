@@ -10,7 +10,7 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.fillStyle = 'black';
 
 // Set the "gradient" stroke style
-ctx.lineWidth = 25; // Simulate brush size like in MNIST
+ctx.lineWidth = 20; // Simulate brush size like in MNIST
 ctx.lineJoin = 'round';
 ctx.lineCap = 'round';
 ctx.strokeStyle = 'black';
@@ -23,15 +23,18 @@ canvas.addEventListener('mousedown', function(e) {
     updateMousePosition(e);
 });
 
+let prevMouse = {x: 0, y: 0}; // Track previous mouse position
+
 // Event Listener for Mouse Move
 canvas.addEventListener('mousemove', function(e) {
     updateMousePosition(e);
     if (draw) {
         ctx.beginPath();
-        ctx.moveTo(mouse.x, mouse.y);
-        ctx.lineTo(mouse.x, mouse.y);
+        ctx.moveTo(prevMouse.x, prevMouse.y); // Start from previous mouse position
+        ctx.lineTo(mouse.x, mouse.y); // Draw line to current mouse position
         ctx.stroke();
     }
+    prevMouse = {x: mouse.x, y: mouse.y}; // Update previous mouse position
 });
 
 // Event Listener for Mouse Up
@@ -81,6 +84,11 @@ saveButton.addEventListener('click', function() {
     .then(responseData => {
         // Handle the response data
         document.getElementById('formattedData').textContent = `Prediction: ${responseData.digit}`;
+        
+        let imageUrl = responseData.image;
+        let predictionImage = document.getElementById('predictionImage');
+        predictionImage.src = "/media/transformed_image.png?t=" + new Date().getTime();
+        console.log(imageUrl);
     })
     .catch(error => {
         console.error(error);

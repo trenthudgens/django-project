@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>sketchguess</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">    <title>sketchguess</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -22,20 +22,17 @@
 
       
 
-    <main>
-      <div id="canvasContainer">
+<main>
+    <div id="canvasContainer">
         <canvas id="sketchpad" width="280" height="280"></canvas>
-      </div>
-      <button id="clearButton">Clear</button>
-      <button id="saveButton">Guess!</button>
+        <img id="predictionImage" src="" alt="">
+    </div>
+    <button id="clearButton">Clear</button>
+    <button id="saveButton">Guess!</button>
 
-      <div>
-        <div id="data">{{ data }}</div>
-        <div id="formattedData">Prediction: {{ data }}</div>
+    <div id="formattedData">Prediction: {{ data }}</div>
+</main>
 
-      </div>
-
-    </main>
 
     <footer>
         <p>&copy; 2023 Trent Hudgens</p>

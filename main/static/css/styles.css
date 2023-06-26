@@ -28,6 +28,9 @@ footer {
     text-align: center;
     padding: 0px 0;
 }
+#predictionImage {
+    border: 2px solid rgb(39, 19, 168);
+  }
 
 .navbar {
     background-color: #333;

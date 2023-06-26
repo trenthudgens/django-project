@@ -35,18 +35,32 @@ model.load_state_dict(torch.load('model.pth', map_location='cpu'))
 # Ensure the model is in evaluation mode
 model.eval()
 
+def store_transformed_image(image):
+    image = transforms.ToPILImage()(image)
+
+    # Resize the image
+    image = image.resize((image.width * 10, image.height * 10), resample=Image.NEAREST)
+    
+    # Save the resized image
+    image_path = os.path.join(settings.MEDIA_ROOT, 'transformed_image.png')
+    image.save(image_path)
+
+    return image_path
+
 @csrf_exempt
 def save_image(request):
-    def get_prediction(digit):
-        # Create a dictionary with the predicted digit
+    def get_prediction(digit, image_url):
+        # Create a dictionary with the predicted digit and image URL
         response_data = {
             'digit': digit,
+            'image': image_url,
         }
 
-        # Return the predicted digit as a JSON response
+        # Return the response as JSON
         return JsonResponse(response_data)
 
     if request.method == "POST":
+        # Decode and process image data
         data = request.body.decode('utf-8')
         received_json_data = json.loads(data)
 
@@ -57,18 +71,16 @@ def save_image(request):
         image = Image.open(BytesIO(image_data)).convert('L')
         image = ImageOps.invert(image)
 
-        image.save("image.png")
-        save = image.resize((28, 28), Image.ANTIALIAS) # DOWNSCALE
-        save.save("dummy.png")
-        # image.save("dummy.png")
+        # Downscale image
+        image = image.resize((28, 28), resample=Image.BILINEAR)
 
-        # Resize and normalize the image
-        transform = transforms.Compose([transforms.Resize((28, 28)),
-                                        transforms.ToTensor(),
-                                        transforms.Normalize((0.5,), (0.5,))])
+        # Perform transformations on the image
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
         image = transform(image)
 
-        # Add an extra dimension because the model expects batches
+        # Store the transformed image
+        image_path = store_transformed_image(image)
+
         image = image.view(1, -1)
 
         # Make the prediction
@@ -79,10 +91,8 @@ def save_image(request):
         _, predicted = torch.max(output.data, 1)
         predicted_digit = predicted.item()
 
-        print(predicted_digit)
-
-        # Pass the predicted digit to the template
-        return get_prediction(predicted_digit)
+        # Pass the predicted digit and image URL to the template
+        return get_prediction(predicted_digit, image_path)
 
     else:
         # If not POST method, render the form
